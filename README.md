@@ -4,7 +4,11 @@ A small step machine for programs that run a plan of steps, where each step
 waits on the outcomes of earlier ones. It has no I/O, no dependencies and no
 allocation (`no_std`), and Kani proves that every run ends.
 
-**Status: In progress.** See [the plan](https://github.com/StevenJPx2/rungs/issues/1).
+**Status: Implemented in `v0.1.0`.** See [the plan](https://github.com/StevenJPx2/rungs/issues/1).
+
+```toml
+rungs = { git = "https://github.com/StevenJPx2/rungs", tag = "v0.1.0" }
+```
 
 Two projects use it:
 
