@@ -349,8 +349,9 @@ fn steps_iterate_lowest_first() {
 
     let set = run.advance();
 
-    assert_eq!(set.iter().collect::<Vec<_>>(), [0, 3, 15]);
-    assert_eq!(set.into_iter().count(), 3);
+    // Bounded, so a broken iterator fails here instead of running forever.
+    assert_eq!(set.iter().take(4).collect::<Vec<_>>(), [0, 3, 15]);
+    assert_eq!(set.into_iter().take(4).count(), 3);
     assert_eq!(set.len(), 3);
     assert!(set.contains(15));
     assert!(!set.contains(1));

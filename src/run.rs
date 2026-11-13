@@ -344,7 +344,7 @@ impl Steps {
 
     #[must_use]
     pub fn len(self) -> usize {
-        self.iter().count()
+        self.iter().take(MAX_STEPS).count()
     }
 
     #[must_use]
@@ -408,6 +408,6 @@ impl<const N: usize> PartialEq<[usize; N]> for Steps {
 
 impl fmt::Debug for Steps {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_list().entries(self.iter()).finish()
+        f.debug_list().entries(self.iter().take(MAX_STEPS)).finish()
     }
 }
