@@ -4,7 +4,7 @@ A small step machine for programs that run a plan of steps, where each step
 waits on the outcomes of earlier ones. It has no I/O, no dependencies and no
 allocation (`no_std`), and Kani proves that every run ends.
 
-**Status: Planned.** See [the plan](https://github.com/StevenJPx2/rungs/issues/1).
+**Status: In progress.** See [the plan](https://github.com/StevenJPx2/rungs/issues/1).
 
 Two projects use it:
 
@@ -16,7 +16,7 @@ Two projects use it:
   model.
 
 ```rust
-use rungs::{Need, Outcome, Plan, Run, Step};
+use rungs::{Need, Outcome, Plan, Step};
 
 // fast, then sure only when fast was unsure (1) or failed
 let plan = Plan::new([
@@ -24,15 +24,36 @@ let plan = Plan::new([
     Step::new(2).after([Need::outcome(0, [Outcome(1), Outcome::FAILED])]),
 ])?;
 
-let mut run = Run::new(&plan);
-assert_eq!(run.advance(&plan), [0]);   // start fast
+let mut run = plan.start();
+assert_eq!(run.advance(), [0]);   // start fast
 
-run.settle(&plan, 0, Outcome(1))?;     // unsure
-assert_eq!(run.advance(&plan), [1]);   // start sure
+run.settle(0, Outcome(1))?;       // unsure
+assert_eq!(run.advance(), [1]);   // start sure
+
+let saved = run.progress();       // plain Copy data, to save
+let run = plan.resume(saved)?;    // checked against the plan
 ```
 
 rungs knows steps only by position and outcomes only by number. Names,
 models, prompts, saving state and time stay with the program that uses it.
+
+## Checking it
+
+```sh
+cargo fmt --all -- --check
+cargo clippy --all-targets --all-features --locked -- -D warnings
+cargo nextest run --all-targets --all-features --locked
+cargo test --doc --locked
+cargo kani                                    # 32 harnesses, a few minutes
+cargo +nightly-2026-10-12 miri test --locked  # Chauffeur's pinned nightly
+cargo build --target wasm32-unknown-unknown --locked
+cargo +1.96 check --all-targets --locked
+cargo mutants
+```
+
+The Kani harnesses in `src/proofs.rs` cover every plan of up to four steps,
+with up to three outcomes and three attempts each, every progress it can
+reach and every call.
 
 ## License
 

@@ -1,4 +1,17 @@
-# Kani harnesses run under cargo kani, not nextest.
+# Kani harnesses, and the narrow outcome sets they run on, are built only
+# under cargo kani.
 test_tool = "nextest"
-exclude_globs = ["src/proofs.rs"]
-exclude_re = []
+exclude_globs = ["src/proofs.rs", "src/narrow.rs"]
+exclude_re = [
+  # Built only under cfg(kani), for the proofs; cargo kani checks them.
+  'src/plan\.rs:\d+:\d+: replace Step::with_need ',
+  'src/plan\.rs:\d+:\d+: replace Plan::unchecked ',
+  # Equivalent: `below(count)` holds codes under 126 and `FAILED` is 127, so
+  # the two never share a bit and | is ^.
+  'src/need\.rs:\d+:\d+: replace \| with \^ in Outcomes::beyond',
+  # Equivalent: past the last position a set holds no step, so one more turn
+  # of the loop finds nothing.
+  'src/run\.rs:\d+:\d+: replace < with <= in <impl Iterator for StepsIter>::next',
+  # Equivalent: no step names itself, so the step's own bit adds nothing.
+  'src/plan\.rs:\d+:\d+: replace > with >= in Plan::derive',
+]
