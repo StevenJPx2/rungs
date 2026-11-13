@@ -1,0 +1,4 @@
+# Kani harnesses run under cargo kani, not nextest.
+test_tool = "nextest"
+exclude_globs = ["src/proofs.rs"]
+exclude_re = []

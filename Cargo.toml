@@ -1,0 +1,33 @@
+[package]
+name = "rungs"
+version = "0.0.0"
+edition = "2024"
+license = "MIT"
+rust-version = "1.96"
+publish = false
+repository = "https://github.com/StevenJPx2/rungs"
+description = "A step machine for plans whose steps wait on earlier outcomes"
+
+[lints.rust]
+unsafe_code = "forbid"
+unexpected_cfgs = { level = "deny", check-cfg = ["cfg(kani)"] }
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+panic_in_result_fn = "deny"
+unreachable = "deny"
+unimplemented = "deny"
+todo = "deny"
+exit = "deny"
+dbg_macro = "deny"
+indexing_slicing = "deny"
+string_slice = "deny"
+arithmetic_side_effects = "deny"
+unchecked_time_subtraction = "deny"
+as_conversions = "deny"
+too_many_lines = "deny"
