@@ -5,7 +5,7 @@ edition = "2024"
 license = "MIT"
 rust-version = "1.100"
 publish = false
-repository = "https://github.com/StevenJPx2/rungs"
+repository = "https://github.com/wrkhse/rungs"
 description = "A step machine for plans whose steps wait on earlier outcomes"
 
 # The crate forbids unsafe code, so Kani's memory-safety checks would only
