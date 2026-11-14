@@ -1,11 +1,6 @@
 //! atelier's `build` and `security-audit` pipelines, and Chauffeur's slice 3
 //! escalation and `after` cases, driven through rungs.
 
-#![expect(
-    clippy::unwrap_used,
-    reason = "test support: a plan that fails to build fails the test that uses it"
-)]
-
 use rungs::{Failed, Need, Outcome, Plan, RunError, State, Status, Step};
 
 const PASSED: Outcome = Outcome(0);
