@@ -344,7 +344,7 @@ impl Steps {
 
     #[must_use]
     pub fn len(self) -> usize {
-        self.iter().take(MAX_STEPS).count()
+        self.iter().count()
     }
 
     #[must_use]
@@ -354,10 +354,7 @@ impl Steps {
 
     #[must_use]
     pub const fn iter(self) -> StepsIter {
-        StepsIter {
-            steps: self,
-            next: 0,
-        }
+        StepsIter { rest: self.0 }
     }
 
     pub(crate) fn insert(&mut self, index: usize) {
@@ -370,24 +367,17 @@ impl Steps {
 /// The steps of a `Steps`, lowest first.
 #[derive(Debug, Clone)]
 pub struct StepsIter {
-    steps: Steps,
-    next: usize,
+    rest: u16,
 }
 
 impl Iterator for StepsIter {
     type Item = usize;
 
     fn next(&mut self) -> Option<usize> {
-        while self.next < MAX_STEPS {
-            let index = self.next;
-            self.next = index.saturating_add(1);
+        let index = self.rest.lowest_one()?;
+        self.rest ^= self.rest.isolate_lowest_one();
 
-            if self.steps.contains(index) {
-                return Some(index);
-            }
-        }
-
-        None
+        usize::try_from(index).ok()
     }
 }
 
@@ -408,6 +398,6 @@ impl<const N: usize> PartialEq<[usize; N]> for Steps {
 
 impl fmt::Debug for Steps {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_list().entries(self.iter().take(MAX_STEPS)).finish()
+        f.debug_list().entries(self.iter()).finish()
     }
 }

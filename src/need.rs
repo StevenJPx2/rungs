@@ -38,7 +38,7 @@ fn below(count: u8) -> Bits {
 /// The lowest code in `bits`.
 #[cfg(not(kani))]
 fn lowest(bits: Bits) -> Option<u8> {
-    u8::try_from(bits.trailing_zeros()).ok()
+    bits.lowest_one().and_then(|index| u8::try_from(index).ok())
 }
 
 /// The code a skipped step matches in a need's set. No step has outcome
@@ -75,13 +75,7 @@ impl Outcomes {
     /// `FAILED`.
     pub(crate) fn beyond(self, count: u8) -> Option<Outcome> {
         let failed = Outcome::FAILED.bit().unwrap_or(0);
-        let rest = self.0 & !(below(count) | failed);
-
-        if rest == 0 {
-            return None;
-        }
-
-        lowest(rest).map(Outcome)
+        lowest(self.0 & !(below(count) | failed)).map(Outcome)
     }
 }
 
