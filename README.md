@@ -46,12 +46,14 @@ models, prompts, saving state and time stay with the program that uses it.
 ```sh
 cargo fmt --all -- --check
 cargo clippy --all-targets --all-features --locked -- -D warnings
+cargo clippy --target wasm32-unknown-unknown --locked -- -D warnings
 cargo nextest run --all-targets --all-features --locked
 cargo test --doc --locked
+RUSTDOCFLAGS='-D warnings' cargo doc --no-deps --locked
 cargo kani                                    # 32 harnesses, a few minutes
 cargo +nightly-2026-10-12 miri test --locked  # Chauffeur's pinned nightly
 cargo build --target wasm32-unknown-unknown --locked
-cargo +1.96 check --all-targets --locked
+cargo +nightly-2026-08-21 check --all-targets --locked  # Kani 0.68's compiler
 cargo mutants
 ```
 

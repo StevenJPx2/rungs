@@ -1,10 +1,5 @@
 //! Plans: what `Plan::new` accepts, refuses and reads back.
 
-#![expect(
-    clippy::unwrap_used,
-    reason = "test support: a plan that fails to build fails the test that uses it"
-)]
-
 use rungs::{MAX_STEPS, Need, Outcome, Plan, PlanError, Step, Wants};
 
 fn audit() -> Plan {

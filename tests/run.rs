@@ -1,10 +1,5 @@
 //! Runs: each call, what it refuses, and resuming a saved progress.
 
-#![expect(
-    clippy::unwrap_used,
-    reason = "test support: a plan that fails to build fails the test that uses it"
-)]
-
 use rungs::{
     Failed, MAX_STEPS, Need, Outcome, Plan, Progress, ResumeError, RunError, State, Status, Step,
     Steps,
